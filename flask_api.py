@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-import io
 
 # ==========================================
 # Flask Application
@@ -84,11 +83,16 @@ def predict():
         # Add batch dimension
         image_array = np.expand_dims(image_array, axis=0)
 
-        # Make prediction
-        predictions = model.predict(
+        # ==========================================
+        # Make Prediction
+        # ==========================================
+        # Direct model call is used instead of
+        # model.predict() for lightweight inference.
+
+        predictions = model(
             image_array,
-            verbose=0
-        )
+            training=False
+        ).numpy()
 
         # Find predicted class
         predicted_index = np.argmax(predictions[0])
@@ -96,7 +100,9 @@ def predict():
         predicted_class = class_names[predicted_index]
 
         # Calculate confidence
-        confidence = float(predictions[0][predicted_index]) * 100
+        confidence = float(
+            predictions[0][predicted_index]
+        ) * 100
 
         # Return JSON response
         return jsonify({
