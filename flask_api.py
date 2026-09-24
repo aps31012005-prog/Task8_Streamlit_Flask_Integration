@@ -36,7 +36,10 @@ MODEL_PATH = "model/cifar10_cnn.keras"
 
 print("LOADING CNN MODEL...", flush=True)
 
-model = tf.keras.models.load_model(MODEL_PATH)
+model = tf.keras.models.load_model(
+    MODEL_PATH,
+    compile=False
+)
 
 print("CNN MODEL LOADED SUCCESSFULLY", flush=True)
 
@@ -66,7 +69,6 @@ def predict():
 
     print("PREDICT REQUEST RECEIVED", flush=True)
 
-    # Check whether image was provided
     if "image" not in request.files:
 
         print("NO IMAGE PROVIDED", flush=True)
@@ -106,7 +108,7 @@ def predict():
         print("IMAGE RESIZED", flush=True)
 
         # ==========================================
-        # Convert Image to NumPy Array
+        # Convert to NumPy Array
         # ==========================================
 
         print("CONVERTING IMAGE TO NUMPY ARRAY...", flush=True)
@@ -116,7 +118,7 @@ def predict():
         print("NUMPY CONVERSION COMPLETED", flush=True)
 
         # ==========================================
-        # Normalize Pixel Values
+        # Normalize
         # ==========================================
 
         print("NORMALIZING IMAGE...", flush=True)
@@ -157,12 +159,10 @@ def predict():
         )
 
         # ==========================================
-        # Find Predicted Class
+        # Predicted Class
         # ==========================================
 
-        predicted_index = np.argmax(
-            predictions[0]
-        )
+        predicted_index = np.argmax(predictions[0])
 
         predicted_class = class_names[
             predicted_index
@@ -174,7 +174,7 @@ def predict():
         )
 
         # ==========================================
-        # Calculate Confidence
+        # Confidence
         # ==========================================
 
         confidence = float(
@@ -187,7 +187,7 @@ def predict():
         )
 
         # ==========================================
-        # Return JSON Response
+        # Return Response
         # ==========================================
 
         response = {
