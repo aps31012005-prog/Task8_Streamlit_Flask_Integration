@@ -77,7 +77,7 @@ if uploaded_file is not None:
                     }
                     
                     # POST Request to Flask API /predict endpoint
-                    response = requests.post(f"{FLASK_API_URL}/predict", files=files, timeout=30)
+                    response = requests.post(f"{FLASK_API_URL}/predict", files=files, timeout=120)
                     
                     if response.status_code == 200:
                         try:
