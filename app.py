@@ -27,8 +27,8 @@ st.markdown(
 # ==========================================
 # API Configuration (Render Live Link)
 # ==========================================
-# Render deploy hone ke baad apna exact URL yahan paste karna
-FLASK_API_URL = "https://task8-flask-api.onrender.com"
+
+FLASK_API_URL = "https://cifar10-flask-api-pwux.onrender.com""
 
 class_names = [
     "Airplane ✈️", "Automobile 🚗", "Bird 🐦", "Cat 🐱", "Deer 🦌",
