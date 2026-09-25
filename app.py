@@ -28,7 +28,7 @@ st.markdown(
 # API Configuration (Render Live Link)
 # ==========================================
 
-FLASK_API_URL = "https://cifar10-flask-api-pwux.onrender.com""
+FLASK_API_URL = "https://cifar10-flask-api-pwux.onrender.com"
 
 class_names = [
     "Airplane ✈️", "Automobile 🚗", "Bird 🐦", "Cat 🐱", "Deer 🦌",
