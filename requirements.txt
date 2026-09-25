@@ -2,6 +2,4 @@ Flask
 tensorflow
 numpy
 Pillow
-requests
-streamlit
 gunicorn
