@@ -45,13 +45,13 @@ st.caption("Interactive Frontend connected with Flask API")
 
 # Check API Health
 try:
-    health_resp = requests.get(f"{FLASK_API_URL}/", timeout=5)
+    health_resp = requests.get(f"{FLASK_API_URL}/", timeout=10)
     if health_resp.status_code == 200:
         st.success("✅ **Flask Backend API Status:** Connected & Live")
     else:
-        st.warning("⚠️ **Flask API Status:** Server responding with error")
-except Exception:
-    st.error("❌ **Flask API Status:** Could not connect to API server")
+        st.warning(f"⚠️ **Flask API Status:** Server responding with status code {health_resp.status_code}")
+except Exception as e:
+    st.error(f"❌ **Flask API Status:** Could not connect to API server ({str(e)})")
 
 st.markdown("---")
 
@@ -72,16 +72,24 @@ if uploaded_file is not None:
                 try:
                     # Convert file to bytes for POST request
                     uploaded_file.seek(0)
-                    files = {"image": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
+                    files = {
+                        "image": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)
+                    }
                     
-                    response = requests.post(f"{FLASK_API_URL}/predict", files=files)
+                    # POST Request to Flask API /predict endpoint
+                    response = requests.post(f"{FLASK_API_URL}/predict", files=files, timeout=30)
                     
                     if response.status_code == 200:
-                        result = response.json()
-                        st.success("Prediction Received!")
-                        st.metric("Predicted Category", result["predicted_class"])
-                        st.metric("Confidence Score", f"{result['confidence']}%")
+                        try:
+                            result = response.json()
+                            st.success("Prediction Received!")
+                            st.metric("Predicted Category", result.get("predicted_class", "N/A"))
+                            st.metric("Confidence Score", f"{result.get('confidence', 0)}%")
+                        except Exception as json_err:
+                            st.error(f"Failed to parse JSON response: {str(json_err)}")
+                            st.text(f"Raw Response: {response.text}")
                     else:
-                        st.error(f"API Error: {response.json().get('error', 'Unknown Error')}")
+                        st.error(f"API Error (Status {response.status_code}): {response.text}")
+
                 except Exception as e:
                     st.error(f"Failed to communicate with API: {str(e)}")
