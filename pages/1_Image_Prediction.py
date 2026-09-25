@@ -18,7 +18,7 @@ st.set_page_config(
 # Flask API Configuration
 # ==========================================
 
-FLASK_API_URL = "https://task8-flask-api.onrender.com/predict"
+FLASK_API_URL = "http://127.0.0.1:5000/predict"
 
 
 # ==========================================
@@ -40,7 +40,7 @@ st.write(
 try:
 
     response = requests.get(
-        "https://task8-flask-api.onrender.com/",
+        "http://127.0.0.1:5000/",
         timeout=3
     )
 
@@ -199,7 +199,7 @@ if uploaded_file is not None:
 
             st.error(
                 "❌ Could not connect to Flask API. "
-                "Please check the deployed Flask API."
+                "Make sure flask_api.py is running on port 5000."
             )
 
 
